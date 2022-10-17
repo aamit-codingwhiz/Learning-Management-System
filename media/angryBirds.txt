@@ -1,0 +1,61 @@
+int green = 8;
+int red = 9;
+int btn1 = 13;
+int btn2 = 6;
+int openMotor = 7;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(A0, INPUT);
+  pinMode(green, OUTPUT);
+  pinMode(red, OUTPUT);
+
+  pinMode(btn1, INPUT_PULLUP);
+  pinMode(btn2, INPUT_PULLUP);
+  pinMode(openMotor, OUTPUT);
+}
+
+int moisture;
+void loop() {
+  moisture = analogRead(A0);
+
+  if (digitalRead(btn1) == 0) {
+    if (moisture > 940) {
+      digitalWrite(openMotor, LOW);
+      
+      digitalWrite(green, HIGH);
+      digitalWrite(red, LOW);
+    } else if (moisture < 540) {
+      digitalWrite(openMotor, HIGH);
+
+      digitalWrite(green, LOW);
+      digitalWrite(red, HIGH);
+    }
+  } else if (digitalRead(btn2) == 0) {
+    if (moisture > 750) {
+      digitalWrite(openMotor, LOW);
+
+      digitalWrite(green, HIGH);
+      digitalWrite(red, LOW);
+    } else if (moisture < 270) {
+      digitalWrite(openMotor, HIGH);
+
+      digitalWrite(green, LOW);
+      digitalWrite(red, HIGH);
+    }
+  } else {
+    if (moisture > 800) {
+      digitalWrite(openMotor, LOW);
+
+      digitalWrite(green, HIGH);
+      digitalWrite(red, LOW);
+    } else if (moisture < 400) {
+      digitalWrite(openMotor, HIGH);
+
+      digitalWrite(green, LOW);
+      digitalWrite(red, HIGH);
+    }
+  }
+
+  delay(1000);
+}

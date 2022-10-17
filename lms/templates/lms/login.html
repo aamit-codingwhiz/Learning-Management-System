@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lms:Login</title>
+    <link rel="icon" href="{% static 'lms/img/jailbreak.png' %}" type="image/icon type">
+
+    <link rel="stylesheet" href="{% static 'lms/login.css' %}">
+</head>
+
+<body>
+
+    <div class="limiter">
+        <div class="container-login">
+            <div class="wrap-login">
+                <form class="login-form validate-form" action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+
+                    <span class="login-form-title">
+                        Learning Management System
+                    </span>
+
+                    <div class="wrap-input validate-input">
+                        <input class="input" type="text" name="user" placeholder="user">
+                        <!-- <span class="focus-input" data-placeholder="username"></span> -->
+                    </div>
+
+                    <div class="wrap-input validate-input">
+                        <input class="input" type="password" name="pass" placeholder="pass">
+                        <!-- <span class="focus-input" data-placeholder="Password"></span> -->
+                    </div>
+
+                    <div class="container-login-form-btn">
+                        <div class="wrap-login-form-btn">
+                            <button class="login-form-btn"> Login </button>
+                        </div>
+                    </div>
+                </form>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

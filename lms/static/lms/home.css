@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+* {
+    font-family: 'Source Sans Pro', sans-serif;
+    /* font-family: 'Poppins' sans-serif; */
+}
+
+#content_feed {
+    /* background-color: #ddd; */
+    /* font-size: larger; */
+
+    display: flex;
+    justify-content: space-around !important;
+}
+
+div.ui.pointing.fixed.menu {
+    margin-bottom: 5% !important;
+}

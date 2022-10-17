@@ -1,0 +1,367 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course</title>
+    <link rel="icon" href="{% static 'lms/img/jailbreak.png' %}" type="image/icon type">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous">
+        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+        * {
+            font-family: 'Poppins' sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ui pointing menu">
+        <!-- <div class="item">
+            <i class="book icon"></i>
+            lms
+        </div> -->
+
+        <a class="item" href="{% url 'homepage' %}">
+            <i class="home icon"></i>
+            Home
+        </a>
+
+        <a class="active item" href="{% url 'courseview' course_id %}">
+            <i class="tag icon"></i>
+            {{course_id}}
+        </a>
+
+        <div class="right menu">
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <input type="text" placeholder="Search course">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+
+            <div class="item">
+                <a>
+                    <i class="user icon"></i>
+                    {{user_id}}
+                </a>
+            </div>
+
+            <div class="item">
+                <a href="{% url 'login' %}">
+                    <i class="power off icon"></i>
+                    log out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui container">
+        <div class="ui segment">
+            {% if all_notice|length == 0 %}
+                <div class="ui negative message">
+                    <div class="header">
+                        No content to show
+                    </div>
+                </div>
+            {% endif %}
+
+            {% for p in all_notice %}
+                <div class="ui blue fluid card">
+                    <div class="content">
+                        {% if 'teacher' in request.session.who %}
+                            <div class="right floated meta">
+                                <!-- dropdown -->
+                                <div class="ui compact menu">
+                                    <div class="ui simple dropdown item">
+                                        &#8230;
+                                        <div class="menu">
+                                            <div class="item">
+                                                <p hidden> {{ p.id }} </p>
+                                                <a class="edit_notice">
+                                                    <i class="pencil alternate icon"></i>
+                                                    Edit post
+                                                </a>
+                                            </div>
+                                            <div class="item">
+                                                <a href="/deleteNotice/{{ p.id }}">
+                                                    <i class="trash alternate icon"></i>
+                                                    Move to trash
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="meta">
+                            {{ p.date_posted }}
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <div class="description">
+                            <div class="content">
+                                {{ p.content }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% if 'teacher' in request.session.who %}
+            <div class="ui segment right aligned">
+                <button class="ui right labeled icon button" id="notice">
+                    <i class="add icon"></i>
+                    New
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
+
+
+        <div class="ui segment">
+            {% if all_assignment|length == 0 %}
+                <div class="ui negative message">
+                    <div class="header">
+                        No content to show
+                    </div>
+                </div>
+            {% endif %}
+
+
+            {% for p in all_assignment %}
+                <div class="ui green fluid raised link card">
+                    <div class="content">
+                        {% if 'teacher' in request.session.who %}
+                            <div class="right floated meta">
+                                <!-- dropdown -->
+                                <div class="ui compact menu">
+                                    <div class="ui simple dropdown item">
+                                        &#8230;
+                                        <div class="menu">
+                                            <div class="item">
+                                                <a href="/deleteAssignment/{{ p.id }}">
+                                                    <i class="trash alternate icon"></i>
+                                                    Move to trash
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <a class="header">
+                            {{ p.title }}
+                        </a>
+                        <div class="meta">
+                            {{ p.date_posted }}
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="description">
+                            {% if p.uploaded_file != 'None' %}
+                                <a href="{{p.uploaded_file.url}}" target="_blank">
+                                    {{p.uploaded_file}}
+                                </a><br>
+                            {% endif %}
+                            {{ p.content }}
+                        </div>
+                    </div>
+                    {% if '1' in p.has_submission_portal %}
+                        {% if 'teacher' in request.session.who %}
+                            <div class="extra content right aligned">
+                                <button class="ui right labeled icon button submission">
+                                    <i class="right arrow icon"></i>
+                                    submission
+                                </button>
+                            </div>
+                        {% endif %}
+
+                        {% if 'student' in request.session.who %}
+                            {% if is_set_all_submission == 1 %}
+                                {% for s in all_submission %}
+                                    {% if p.id == s.Assignment_id.id and s.Student_user_id.user_id == request.session.user_id %}
+                                        <div class="content">
+                                            <div class="ui green mini positive message">
+                                                <div class="header">
+                                                    You have submitted your assignment
+                                                </div>
+                                                <p>click here to download.</p>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                            {% elif is_set_all_submission == 0 %}
+                                {% if p.id == all_submission.Assignment_id.id and all_submission.Student_user_id.user_id == request.session.user_id %}
+                                    <div class="content">
+                                        <div class="ui green mini positive message">
+                                            <div class="header">
+                                                You have submitted your assignment
+                                            </div>
+                                            <p>
+                                                <a href="{{ all_submission.uploaded_file.url }}" target="_blank">
+                                                    click here
+                                                </a>
+                                                to view
+                                                <br><br>
+                                                <strong>ps:</strong> to re-submit, submit the new file
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+
+                            <div class="content">
+                                <div class="ui red mini negative message">
+                                    <div class="header">
+                                        assignment due
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="extra content right aligned">
+                                <p hidden> {{ p.id }} </p>
+                                <button class="ui right labeled icon button btn_student_submission">
+                                    <i class="right arrow icon"></i>
+                                    submit
+                                </button>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {% if 'teacher' in request.session.who %}
+                <div class="ui segment right aligned">
+                    <button class="ui right labeled icon button" id="submission_btn">
+                        <i class="add icon"></i>
+                        New
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- modal entries -->
+
+    <!-- modal 0 -->
+    <!-- for student submission panel -->
+    <div class="ui small modal">
+        <div class="header">Assignment</div>
+        <div class="content">
+            <form class="ui form" method="POST" enctype="multipart/form-data" action="/postSubmission/">
+                {% csrf_token %}
+                <input type="hidden" name="assignment_id" class="assignment_id">
+                <input type="hidden" name="course_id" value="{{ course_id }}">
+                <div class="field">
+                    <label>Name</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="field">
+                    <input type="File" name="uploaded_file">
+                </div>
+                <button class="positive fluid ui button">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- modal 1 -->
+    <!-- for announcement -->
+    <div class="ui modal" id="short_modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Announcement
+        </div>
+        <div class="content">
+            <form class="ui form" method="POST" action="/postNotice/">
+                {% csrf_token %}
+                <input type="hidden" name="course_id" value="{{ course_id }}">
+                <div class="field">
+                    <label>Content</label>
+                    <textarea name="content" placeholder="what's playing your mind ..."></textarea>
+                </div>
+                <button class="ui fluid positive button" type="submit">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- modal 2 -->
+    <div class="ui longer modal" id="longer_modal">
+        <div class="scrolling content">
+            <table class="ui inverted table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>ID</th>
+                        <th class="right aligned">view submission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sharmin Akter</td>
+                        <td>011171018</td>
+                        <td class="right aligned">
+                            <a>view</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- modal 3 -->
+    <div class="ui modal" id="assignment">
+        <i class="close icon"></i>
+        <div class="header">
+            Class Content
+        </div>
+        <div class="content">
+            <form class="ui form" method="POST" enctype="multipart/form-data" action="/postAssignment/">
+                {% csrf_token %}
+                <input type="hidden" name="course_id" value="{{ course_id }}">
+
+                <div class="field">
+                    <label>Title</label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="field">
+                    <label>content</label>
+                    <textarea name="content"></textarea>
+                </div>
+                <div class="field">
+                    <label>attach file</label>
+                    <input type="file" name="file_path">
+                </div>
+                <div class="field right aligned">
+                    <div class="ui container right aligned">
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" name="has_submission_portal" tabindex="0" class="hidden">
+                            </div>
+                            <label>submission window</label>
+                        </div>
+                    </div>
+                </div>
+                <button class="ui green fluid button" type="submit">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'lms/courseView.js' %}" defer></script>
+</body>
+
+</html>
