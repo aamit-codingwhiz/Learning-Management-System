@@ -1,7 +1,6 @@
 "# Learning-Management-System" 
 
 This project involves building a learning management system using the Django framework.
-
 Features included in a learning management system built using Django:
 1. User authentication and registration
 2. Course creation and management
