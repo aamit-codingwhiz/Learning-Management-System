@@ -1,12 +1,26 @@
-"# Learning-Management-System" 
+# Learning Management System
 
-This project involves building a learning management system using the Django framework.
-Features included in a learning management system built using Django:
-1. User authentication and registration
-2. Course creation and management
-3. Lesson creation and management
-4. Quiz and exam creation and management
-5. Discussion forums for students and teachers
-6. Gradebook and progress tracking for students
-7. Announcement board for teachers to notify students of important information
-8. Assignment submission and grading
+A web-based Learning Management System built with **Django** for managing courses, lessons, assessments, assignments, and student progress.
+
+## Features
+
+* User registration and authentication
+* Course and lesson management
+* Quizzes and exams
+* Assignment submission and grading
+* Discussion forums
+* Gradebook and progress tracking
+* Teacher announcements
+
+## Tech Stack
+
+Python • Django • SQLite • HTML/CSS
+
+## Run
+
+```bash
+python manage.py migrate
+python manage.py runserver
+```
+
+Built as a full-stack Django project for exploring online learning platform development.
